@@ -22,6 +22,7 @@
         ctx
         snake: Point[] = []
         grid: Point[] = []
+        food: Point = []
         direction = 'left'
         foodColor = 'green'
         snakeColor = 'red'
@@ -35,10 +36,11 @@
           this.ctx = this.container.getContext('2d') as CanvasRenderingContext2D
           this.drawGrid()
           this.createGridPos()
+          this.createFood()
+          this.drawFood()
           this.createSnake()
           this.drawSnkae()
-          this.drawFood()
-          /* this.loop() */
+          this.loop()
         }
 
         createGridPos() {
@@ -71,23 +73,25 @@
           ]
         }
 
-        createFood(): Point {
+        createFoodPos(): Point {
           const food = this.grid[(Math.random() * this.grid.length) | 0]
           for (let i = 0; i < this.snake.length; i++) {
             const item = this.snake[i]
             if (item[0] === food[0] && item[1] === food[1]) {
-              return this.createFood()
+              return this.createFoodPos()
             }
           }
           return food
         }
 
+        createFood() {
+          this.food = this.createFoodPos()
+        }
         drawFood() {
-          const food = this.createFood()
           this.ctx.fillStyle = this.foodColor
           this.ctx.fillRect(
-            food[0] * this.gap + this.offset,
-            food[1] * this.gap + this.offset,
+            this.food[0] * this.gap + this.offset,
+            this.food[1] * this.gap + this.offset,
             this.gap,
             this.gap
           )
@@ -113,13 +117,16 @@
 
         loop() {
           this.time = window.setTimeout(() => {
+            this.container.height = this.height
             this.snakeMove()
             console.log(this.snake)
             this.drawGrid()
+            this.drawFood()
             this.drawSnkae()
             this.loop()
           }, this.speed * 20)
         }
+
         snakeMove() {
           let [x, y] = this.snake[0]
           switch (this.direction) {
