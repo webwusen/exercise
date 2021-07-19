@@ -5,13 +5,15 @@
     :value="currentMenut"
     :options="routesList"
   ></n-menu>
-  <div class="page"><router-view></router-view></div>
+  <div class="page">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
-  import { NMenu, MenuOption } from 'naive-ui'
+  import { NMenu } from 'naive-ui'
   import { routes } from '@/router'
   import { formatMenuData, menuItem } from '@/utils'
 

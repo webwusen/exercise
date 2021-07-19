@@ -1,10 +1,10 @@
 <template>
-  <div style="padding: 20px">
+  <div class="snake">
+    <canvas id="grid"></canvas>
     <canvas id="snake"></canvas>
   </div>
 </template>
 <script lang="ts">
-  import { type } from 'os'
   import { defineComponent, onMounted } from 'vue'
   export default defineComponent({
     name: 'Snake',
@@ -12,35 +12,45 @@
       type Point = number[]
 
       class Snake {
-        width = 601
-        height = 401
+        width = 0
+        height = 0
         gap = 10
-        row = Math.floor(this.width / this.gap)
-        col = Math.floor(this.height / this.gap)
+        row = 60
+        col = 40
         offset = 0.5
-        container
-        ctx
+        container: HTMLCanvasElement
+        ctx: CanvasRenderingContext2D
         snake: Point[] = []
+        gridContainer: HTMLCanvasElement
+        gridCtx: CanvasRenderingContext2D
         grid: Point[] = []
         food: Point = []
-        direction = 'left'
+        direction = 'right'
         foodColor = 'green'
         snakeColor = 'red'
-        speed = 50
-        time: number | null = null
+        speed = 150
+        timer: null | number = null
 
-        constructor(container: HTMLCanvasElement) {
+        constructor(container: HTMLCanvasElement, grid: HTMLCanvasElement) {
+          this.width = this.row * this.gap + 1
+          this.height = this.col * this.gap + 1
           this.container = container
           this.container.width = this.width
           this.container.height = this.height
           this.ctx = this.container.getContext('2d') as CanvasRenderingContext2D
+
+          this.gridContainer = grid
+          this.gridContainer.width = this.width
+          this.gridContainer.height = this.height
+          this.gridCtx = this.gridContainer.getContext('2d') as CanvasRenderingContext2D
+          window.addEventListener('keydown', this.getDreiction)
           this.drawGrid()
           this.createGridPos()
           this.createFood()
           this.drawFood()
           this.createSnake()
           this.drawSnkae()
-          this.loop()
+          this.snakeMove()
         }
 
         createGridPos() {
@@ -53,14 +63,14 @@
 
         drawGrid() {
           for (let i = 0; i <= this.col; i++) {
-            this.ctx.moveTo(0, i * this.gap + this.offset)
-            this.ctx.lineTo(this.width, i * this.gap + this.offset)
+            this.gridCtx.moveTo(0, i * this.gap + this.offset)
+            this.gridCtx.lineTo(this.width, i * this.gap + this.offset)
           }
           for (let i = 0; i <= this.row; i++) {
-            this.ctx.moveTo(i * this.gap + this.offset, 0)
-            this.ctx.lineTo(i * this.gap + this.offset, this.height)
+            this.gridCtx.moveTo(i * this.gap + this.offset, 0)
+            this.gridCtx.lineTo(i * this.gap + this.offset, this.height)
           }
-          this.ctx.stroke()
+          this.gridCtx.stroke()
         }
 
         createSnake() {
@@ -86,6 +96,9 @@
 
         createFood() {
           this.food = this.createFoodPos()
+          if (this.speed > 50) {
+            this.speed--
+          }
         }
         drawFood() {
           this.ctx.fillStyle = this.foodColor
@@ -110,49 +123,96 @@
           }
         }
 
-        drawMoveSnake(data: Point) {
-          this.snake.unshift(data)
-          this.snake.pop()
-        }
-
-        loop() {
-          this.time = window.setTimeout(() => {
-            this.container.height = this.height
-            this.snakeMove()
-            console.log(this.snake)
-            this.drawGrid()
-            this.drawFood()
-            this.drawSnkae()
-            this.loop()
-          }, this.speed * 20)
+        draw() {
+          // 清空画布
+          this.ctx.clearRect(0, 0, this.width, this.height)
+          this.drawFood()
+          this.drawSnkae()
         }
 
         snakeMove() {
           let [x, y] = this.snake[0]
           switch (this.direction) {
             case 'left': {
-              const newPoint = this.snake[0]
-              this.drawMoveSnake([newPoint[0] + 1, newPoint[1]])
+              x -= 1
               break
             }
             case 'right': {
+              x += 1
               break
             }
             case 'up': {
+              y -= 1
               break
             }
             case 'down': {
+              y += 1
               break
             }
           }
+          if (x === this.food[0] && y === this.food[1]) {
+            this.createFood()
+          } else {
+            this.snake.pop()
+          }
+          this.snake.unshift([x, y])
+          this.draw()
+          this.timer = window.setTimeout(() => {
+            this.snakeMove()
+          }, this.speed)
+        }
+
+        getDreiction(e: KeyboardEvent) {
+          switch (e.key) {
+            case 'ArrowLeft': {
+              if (this.direction !== 'right') {
+                this.direction = 'left'
+              }
+              break
+            }
+            case 'ArrowRight': {
+              if (this.direction !== 'left') {
+                this.direction = 'right'
+              }
+              break
+            }
+            case 'ArrowUp': {
+              if (this.direction !== 'bottom') {
+                this.direction = 'top'
+              }
+              break
+            }
+            case 'ArrowDown': {
+              if (this.direction !== 'top') {
+                this.direction = 'bottom'
+              }
+              break
+            }
+          }
+          console.log(e, this.direction)
+        }
+
+        remove() {
+          window.removeEventListener('keydown', this.getDreiction)
         }
       }
 
       onMounted(() => {
-        new Snake(document.getElementById('snake') as HTMLCanvasElement)
+        new Snake(
+          document.getElementById('snake') as HTMLCanvasElement,
+          document.getElementById('grid') as HTMLCanvasElement
+        )
       })
 
       return {}
     }
   })
 </script>
+<style scoped>
+  .snake {
+    padding: 20px;
+  }
+  .snake canvas {
+    position: absolute;
+  }
+</style>
