@@ -1,16 +1,33 @@
 <template>
   <div class="snake">
+    <n-space>
+      <n-button @click="begin">begin</n-button>
+      <n-button @click="control">{{ status }}</n-button>
+      <n-button @click="end">end</n-button>
+      <div class="score"> Score: {{ scroe }} </div>
+    </n-space>
     <canvas id="grid"></canvas>
     <canvas id="snake"></canvas>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, onMounted } from 'vue'
+  import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
+  import { useMessage, NButton, NSpace } from 'naive-ui'
+
   export default defineComponent({
     name: 'Snake',
+    components: {
+      NButton,
+      NSpace
+    },
     setup() {
-      type Point = number[]
+      const message = useMessage()
+      const status = ref('pause')
+      const scroe = ref(0)
+      let snake: Snake
 
+      type Point = number[]
+      type Tfunc = (scroe: number) => void
       class Snake {
         width = 0
         height = 0
@@ -29,9 +46,14 @@
         foodColor = 'green'
         snakeColor = 'red'
         speed = 150
+        canChange = true
         timer: null | number = null
+        isStart = false
+        score = 0
+        sendScroe: Tfunc
 
-        constructor(container: HTMLCanvasElement, grid: HTMLCanvasElement) {
+        constructor(container: HTMLCanvasElement, grid: HTMLCanvasElement, sendScroe: Tfunc) {
+          this.sendScroe = sendScroe
           this.width = this.row * this.gap + 1
           this.height = this.col * this.gap + 1
           this.container = container
@@ -44,13 +66,16 @@
           this.gridContainer.height = this.height
           this.gridCtx = this.gridContainer.getContext('2d') as CanvasRenderingContext2D
           window.addEventListener('keydown', this.getDreiction)
+          this.init()
+        }
+
+        init() {
           this.drawGrid()
           this.createGridPos()
           this.createFood()
           this.drawFood()
           this.createSnake()
-          this.drawSnkae()
-          this.snakeMove()
+          this.firstDrawSnake()
         }
 
         createGridPos() {
@@ -95,6 +120,15 @@
         }
 
         createFood() {
+          if (this.food.length) {
+            // 清空食物
+            this.ctx.clearRect(
+              this.food[0] * this.gap + this.offset,
+              this.food[1] * this.gap + this.offset,
+              this.gap,
+              this.gap
+            )
+          }
           this.food = this.createFoodPos()
           if (this.speed > 50) {
             this.speed--
@@ -110,24 +144,50 @@
           )
         }
 
-        drawSnkae() {
+        firstDrawSnake() {
           for (let i = 0; i < this.snake.length; i++) {
-            const item = this.snake[i]
+            const point = this.snake[i]
             this.ctx.fillStyle = this.snakeColor
             this.ctx.fillRect(
-              item[0] * this.gap + this.offset,
-              item[1] * this.gap + this.offset,
+              point[0] * this.gap + this.offset,
+              point[1] * this.gap + this.offset,
               this.gap,
               this.gap
             )
           }
         }
 
+        drawSnkae() {
+          const point = this.snake[0]
+          this.ctx.fillStyle = this.snakeColor
+          this.ctx.fillRect(
+            point[0] * this.gap + this.offset,
+            point[1] * this.gap + this.offset,
+            this.gap,
+            this.gap
+          )
+        }
+
         draw() {
-          // 清空画布
-          this.ctx.clearRect(0, 0, this.width, this.height)
           this.drawFood()
           this.drawSnkae()
+        }
+
+        gameOver(point: Point): boolean {
+          if (point[0] > this.row || point[0] < 0 || point[1] > this.col || point[1] < 0) {
+            message.error('Game Over!')
+            return true
+          }
+          return false
+        }
+
+        calcScore(isEnd?: boolean) {
+          if (isEnd) {
+            this.score = 0
+          } else {
+            this.score += 10
+          }
+          this.sendScroe(this.score)
         }
 
         snakeMove() {
@@ -150,19 +210,36 @@
               break
             }
           }
+          if (this.gameOver([x, y])) {
+            if (this.timer) {
+              clearTimeout(this.timer)
+            }
+            return
+          }
           if (x === this.food[0] && y === this.food[1]) {
             this.createFood()
+            this.calcScore()
           } else {
-            this.snake.pop()
+            const tail = this.snake.pop() as Point
+            // 清除尾部
+            this.ctx.clearRect(
+              tail[0] * this.gap,
+              tail[1] * this.gap,
+              this.gap + this.offset,
+              this.gap + this.offset
+            )
           }
           this.snake.unshift([x, y])
           this.draw()
+          this.canChange = true
           this.timer = window.setTimeout(() => {
             this.snakeMove()
           }, this.speed)
         }
 
-        getDreiction(e: KeyboardEvent) {
+        getDreiction = (e: KeyboardEvent): void => {
+          if (!this.canChange) return
+          this.canChange = false
           switch (e.key) {
             case 'ArrowLeft': {
               if (this.direction !== 'right') {
@@ -177,42 +254,110 @@
               break
             }
             case 'ArrowUp': {
-              if (this.direction !== 'bottom') {
-                this.direction = 'top'
+              if (this.direction !== 'down') {
+                this.direction = 'up'
               }
               break
             }
             case 'ArrowDown': {
-              if (this.direction !== 'top') {
-                this.direction = 'bottom'
+              if (this.direction !== 'up') {
+                this.direction = 'down'
               }
               break
             }
           }
-          console.log(e, this.direction)
         }
 
         remove() {
           window.removeEventListener('keydown', this.getDreiction)
         }
+
+        begin() {
+          if (!this.isStart) {
+            this.isStart = true
+            this.snakeMove()
+          }
+        }
+
+        pause(callback?: Function) {
+          if (this.isStart && this.timer) {
+            clearTimeout(this.timer)
+            callback && callback()
+          }
+        }
+        continue(callback: Function) {
+          if (this.isStart) {
+            callback()
+            this.snakeMove()
+          }
+        }
+
+        end() {
+          this.calcScore(true)
+          this.pause()
+          this.isStart = false
+          this.gridCtx.clearRect(0, 0, this.width, this.height)
+          this.ctx.clearRect(0, 0, this.width, this.height)
+          this.init()
+        }
       }
 
       onMounted(() => {
-        new Snake(
+        snake = new Snake(
           document.getElementById('snake') as HTMLCanvasElement,
-          document.getElementById('grid') as HTMLCanvasElement
+          document.getElementById('grid') as HTMLCanvasElement,
+          (s) => {
+            scroe.value = s
+          }
         )
       })
 
-      return {}
+      onUnmounted(() => {
+        snake.remove()
+      })
+
+      const begin = () => {
+        snake.begin()
+      }
+
+      const control = () => {
+        if (status.value === 'pause') {
+          snake.pause(() => {
+            status.value = 'continue'
+          })
+        } else {
+          snake.continue(() => {
+            status.value = 'pause'
+          })
+        }
+      }
+
+      const end = () => {
+        snake.end()
+        status.value = 'pause'
+      }
+
+      return {
+        status,
+        scroe,
+        begin,
+        control,
+        end
+      }
     }
   })
 </script>
 <style scoped>
   .snake {
     padding: 20px;
+    height: 100%;
   }
   .snake canvas {
     position: absolute;
+    margin-top: 10px;
+  }
+  .score {
+    flex: 1;
+    text-align: right;
   }
 </style>

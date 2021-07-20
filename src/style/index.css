@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 html,
 body,
 #app {
@@ -5,9 +9,11 @@ body,
   height: 100%;
   overflow: hidden;
 }
+
 #app {
   display: flex;
 }
+
 .menu {
   width: 200px;
   height: 100%;
