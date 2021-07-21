@@ -16,6 +16,11 @@
   export default defineComponent({
     name: 'Three',
     setup() {
+      interface NewObject3D extends THREE.Object3D {
+        material?: THREE.Material
+        isMesh?: boolean
+      }
+
       class Car {
         private container
         private width = 0
@@ -61,10 +66,11 @@
 
           this.scene.add(this.grid)
           this.renderer.setSize(this.width, this.height)
+
           this.composer = new EffectComposer(this.renderer)
           let renderPass = new RenderPass(this.scene, this.camera)
           this.composer.addPass(renderPass)
-
+          // 添加选中效果
           this.outlinePass = new OutlinePass(
             new THREE.Vector2(this.width, this.height),
             this.scene,
@@ -93,9 +99,9 @@
             '/public/models/ferrari.glb',
             (gltf) => {
               const carModel = gltf.scene
-              let component = gltf.scene.getObjectByName('body')
+              //let component = gltf.scene.getObjectByName('body')
               carModel.traverse((obj) => {
-                if (obj.isMesh) {
+                if ((obj as NewObject3D).isMesh) {
                   obj.castShadow = true
                   obj.receiveShadow = true
                 }
@@ -113,9 +119,8 @@
                 raycaster.setFromCamera(mouse, this.camera as THREE.PerspectiveCamera)
                 let intersects = raycaster.intersectObjects(carModel.children, true)
                 if (intersects.length > 0) {
-                  let selectedObjects = intersects[0].object
-                  let newMaterrial = selectedObjects.material.clone()
-                  console.log(newMaterrial)
+                  let selectedObjects: NewObject3D = intersects[0].object
+                  let newMaterrial = (selectedObjects.material as THREE.Material).clone()
                   selectedObjects.material = newMaterrial
                   ;(this.outlinePass as OutlinePass).selectedObjects = [selectedObjects]
                 }
