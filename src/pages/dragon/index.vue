@@ -46,7 +46,6 @@
           canvas.width = width
           canvas.height = height
           ctx.fillStyle = '#fff'
-          console.log(image.width)
           ctx.drawImage(image, 0, 0)
           const imageData = ctx.getImageData(0, 0, width, height).data
 

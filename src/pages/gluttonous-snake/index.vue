@@ -29,27 +29,27 @@
       type Point = number[]
       type Tfunc = (scroe: number) => void
       class Snake {
-        width = 0
-        height = 0
-        gap = 10
-        row = 60
-        col = 40
-        offset = 0.5
-        container: HTMLCanvasElement
-        ctx: CanvasRenderingContext2D
-        snake: Point[] = []
-        gridContainer: HTMLCanvasElement
-        gridCtx: CanvasRenderingContext2D
-        grid: Point[] = []
-        food: Point = []
-        direction = 'right'
-        foodColor = 'green'
-        snakeColor = 'red'
-        speed = 150
-        canChange = true
-        timer: null | number = null
-        isStart = false
-        score = 0
+        private width = 0
+        private height = 0
+        private gap = 10
+        private row = 60
+        private col = 40
+        private offset = 0.5
+        private container: HTMLCanvasElement
+        private ctx: CanvasRenderingContext2D
+        private snake: Point[] = []
+        private gridContainer: HTMLCanvasElement
+        private gridCtx: CanvasRenderingContext2D
+        private grid: Point[] = []
+        private food: Point = []
+        private direction = 'right'
+        private foodColor = 'green'
+        private snakeColor = 'red'
+        private speed = 150
+        private canChange = true
+        private timer: null | number = null
+        private isStart = false
+        private score = 0
         sendScroe: Tfunc
 
         constructor(container: HTMLCanvasElement, grid: HTMLCanvasElement, sendScroe: Tfunc) {
