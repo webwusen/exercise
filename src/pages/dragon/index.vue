@@ -25,19 +25,19 @@
           w: number
         ): Promise<number> => {
           return new Promise((res) => {
-            setTimeout(() => {
+            requestAnimationFrame(() => {
+              ctx.fillStyle = 'rgba(255,215,0,.8)'
               for (let h = 0; h < height; h += gap) {
                 const position = (width * h + w) * 4
                 const r = imageData[position]
                 const g = imageData[position + 1]
                 const b = imageData[position + 2]
                 if (r + g + b === 0) {
-                  ctx.fillStyle = 'rgba(255,215,0,.8)'
                   ctx.fillRect(w, h, 2, 2)
                 }
               }
               res(1)
-            }, 0)
+            })
           })
         }
 

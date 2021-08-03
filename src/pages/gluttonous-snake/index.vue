@@ -87,6 +87,7 @@
         }
 
         drawGrid() {
+          this.gridCtx.beginPath()
           for (let i = 0; i <= this.col; i++) {
             this.gridCtx.moveTo(0, i * this.gap + this.offset)
             this.gridCtx.lineTo(this.width, i * this.gap + this.offset)
