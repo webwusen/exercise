@@ -14,7 +14,7 @@
   import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass'
 
   export default defineComponent({
-    name: 'Three',
+    name: 'Car',
     setup() {
       interface NewObject3D extends THREE.Object3D {
         material?: THREE.Material

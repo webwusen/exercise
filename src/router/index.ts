@@ -18,11 +18,11 @@ export const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: '/threeCar',
-        name: 'ThreeCar',
-        component: () => import('@/pages/threeCar/index.vue'),
+        path: '/car',
+        name: 'Car',
+        component: () => import('@/pages/three-car/index.vue'),
         meta: {
-          key: '/threeCar'
+          key: '/car'
         }
       },
       {
