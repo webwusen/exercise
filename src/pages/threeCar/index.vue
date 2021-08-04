@@ -22,7 +22,7 @@
       }
 
       class Car {
-        private container
+        private container:HTMLDivElement|null=null
         private width = 0
         private height = 0
         private scene: THREE.Scene | null = null
