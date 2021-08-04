@@ -14,7 +14,7 @@
   import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass'
 
   export default defineComponent({
-    name: 'Three',
+    name: 'Car',
     setup() {
       interface NewObject3D extends THREE.Object3D {
         material?: THREE.Material
@@ -22,6 +22,7 @@
       }
 
       class Car {
+        // 容器
         private container: HTMLDivElement | null = null
         private width = 0
         private height = 0
@@ -32,25 +33,24 @@
         private grid: THREE.GridHelper | null = null
         private renderTimer: number | null = null
         private composer: EffectComposer | null = null
+        // 选中部件
         private outlinePass: OutlinePass | null = null
 
         constructor(container: HTMLDivElement) {
           this.container = container
           this.width = container.clientWidth
           this.height = container.clientHeight
-
+          // 场景
           this.scene = new THREE.Scene()
+          //相机
           this.camera = new THREE.PerspectiveCamera(50, this.width / this.height, 0.1, 100)
+          this.camera.position.set(4.25, 1.4, -4.5)
+
           this.renderer = new THREE.WebGLRenderer({ antialias: true })
 
           this.controls = new OrbitControls(this.camera, this.container)
-
-          this.camera.position.set(4.25, 1.4, -4.5)
-
           this.controls.target.set(0, 0.5, 0)
           this.controls.update()
-
-          this.renderer.shadowMap.enabled = true
 
           const pmremGenerator = new THREE.PMREMGenerator(this.renderer)
           this.scene.background = new THREE.Color(0xeeeeee)
@@ -58,8 +58,8 @@
           this.scene.environment = pmremGenerator.fromScene(new RoomEnvironment()).texture
           this.scene.fog = new THREE.Fog(0xeeeeee, 10, 50)
 
+          // 地板网格
           this.grid = new THREE.GridHelper(100, 40, 0x000000, 0x000000)
-          this.grid.receiveShadow = true
           ;(this.grid.material as THREE.Material).opacity = 0.1
           ;(this.grid.material as THREE.Material).depthWrite = false
           ;(this.grid.material as THREE.Material).transparent = true
@@ -70,7 +70,8 @@
           this.composer = new EffectComposer(this.renderer)
           let renderPass = new RenderPass(this.scene, this.camera)
           this.composer.addPass(renderPass)
-          // 添加选中效果
+
+          // 添加选中效果，选中的部位添加outline
           this.outlinePass = new OutlinePass(
             new THREE.Vector2(this.width, this.height),
             this.scene,
@@ -95,24 +96,20 @@
           darcoloader.setDecoderPath('/node_modules/three/examples/js/libs/draco/')
           loader.setDRACOLoader(darcoloader)
 
+          // 加载车的模型
           loader.load(
             '/public/models/ferrari.glb',
             (gltf) => {
               const carModel = gltf.scene
-              //let component = gltf.scene.getObjectByName('body')
-              carModel.traverse((obj) => {
-                if ((obj as NewObject3D).isMesh) {
-                  obj.castShadow = true
-                  obj.receiveShadow = true
-                }
-              })
               carModel.rotation.y = -1.5
               console.log(carModel)
+              // 场景添加车的模型
               ;(this.scene as THREE.Scene).add(carModel)
 
               const raycaster = new THREE.Raycaster()
               const mouse = new THREE.Vector2()
 
+              // 选中当前点击的车的部件
               const selectHandler = (ev: MouseEvent) => {
                 mouse.x = (ev.clientX / this.width) * 2 - 1
                 mouse.y = (ev.clientY / this.height) * 2 - 1
@@ -122,11 +119,15 @@
                   let selectedObjects: NewObject3D = intersects[0].object
                   let newMaterrial = (selectedObjects.material as THREE.Material).clone()
                   selectedObjects.material = newMaterrial
+                  // 更新选中的部件
                   ;(this.outlinePass as OutlinePass).selectedObjects = [selectedObjects]
                 }
               }
 
               document.body.addEventListener('click', selectHandler, false)
+              onUnmounted(() => {
+                document.body.removeEventListener('click', selectHandler)
+              })
             },
             (xhr) => {
               //侦听模型加载进度

@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    <img id="brush" src="@/assets/images/brush.png" />
     <canvas class="canvas" id="dragon"></canvas>
   </div>
 </template>
@@ -18,12 +19,18 @@
         image.src = dragonSrc
         const gap = 1
 
+        // 画笔
+        const brush = document.getElementById('brush') as HTMLDivElement
+
+        /* 使用promise，让龙是一点一点绘制出来的 */
         const draw = (
           imageData: Uint8ClampedArray,
           width: number,
           height: number,
           w: number
         ): Promise<number> => {
+          // 移动画笔
+          brush.style.left = `${w}px`
           return new Promise((res) => {
             requestAnimationFrame(() => {
               ctx.fillStyle = 'rgba(255,215,0,.8)'
@@ -51,10 +58,11 @@
 
           ctx.fillStyle = '#fff'
           ctx.fillRect(0, 0, width, height)
-
           for (let w = 0; w < width; w += gap) {
             await draw(imageData, width, height, w)
           }
+          // 绘制结束隐藏画笔
+          brush.style.display = 'none'
         }
       })
       return {}
@@ -63,19 +71,27 @@
 </script>
 <style scoped>
   .box {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    font-size: 0;
   }
-  .canvas {
-    animation: move 9s;
+  #brush {
+    position: absolute;
+    width: 20px;
+    top: 0;
+    left: 0;
+    animation: anim 1s infinite;
   }
-  @keyframes move {
+
+  @keyframes anim {
     0% {
-      transform: translateX(100%);
+      top: 0;
+    }
+    50% {
+      top: calc(100% - 20px);
     }
     100% {
-      transform: translateX(0);
+      top: 0;
     }
   }
 </style>
