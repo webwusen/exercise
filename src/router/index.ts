@@ -40,6 +40,14 @@ export const routes: Array<RouteRecordRaw> = [
         meta: {
           key: '/snake'
         }
+      },
+      {
+        path: '/css3',
+        name: 'Css3',
+        component: () => import('@/pages/css3/index.vue'),
+        meta: {
+          key: '/css3'
+        }
       }
     ]
   }

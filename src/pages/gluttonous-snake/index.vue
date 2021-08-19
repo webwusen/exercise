@@ -1,5 +1,5 @@
 <template>
-  <div class="snake">
+  <div class="snake box-padding">
     <n-space>
       <n-button @click="begin">begin</n-button>
       <n-button @click="control">{{ status }}</n-button>
@@ -350,7 +350,6 @@
 </script>
 <style scoped>
   .snake {
-    padding: 20px;
     height: 100%;
   }
   .snake canvas {
