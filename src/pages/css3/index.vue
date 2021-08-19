@@ -14,8 +14,7 @@
     defineComponent,
     reactive,
     Component,
-    defineAsyncComponent,
-    getCurrentInstance
+    defineAsyncComponent
   } from 'vue'
   import { NButtonGroup, NButton } from 'naive-ui'
 
@@ -45,7 +44,7 @@
       const changeTab = (tab: tabItem): void => {
         active = tab
       }
-      
+
       return {
         tabs,
         active,
