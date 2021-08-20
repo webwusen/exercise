@@ -12,21 +12,21 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted } from 'vue'
+  import { defineComponent, onMounted, onUnmounted } from 'vue'
 
   export default defineComponent({
     name: 'SkyBox',
     setup() {
+      // 清除事件句柄函数
+      let removeFun: Function | null = null
       onMounted(() => {
         let rotateX = 0
         let rotateY = 0
-        let initRotateX = 0
-        let initRotateY = 0
-        let moveX = 0
-        let moveY = 0
         let startX = 0
         let startY = 0
         let timer = -1
+        // 旋转速度(越小速度越快)
+        const speed = 1
         const space = document.getElementById('space') as HTMLDivElement
         const bindMouseFn = () => {
           /**
@@ -52,22 +52,31 @@
            * 改变度数后，更新停留点start的数据
            */
           function mouseMoveHandler(event: MouseEvent) {
-            moveX = event.pageY - startY
-            moveY = event.pageX - startX
-            rotateX = rotateX + (-(moveX / 5) + initRotateX)
-            rotateY = rotateY + (moveY / 5 + initRotateY)
+            rotateX = rotateX + -(event.pageY - startY / speed)
+            rotateY = rotateY + (event.pageX - startX / speed)
             startY = event.pageY
             startX = event.pageX
           }
 
           document.addEventListener('mousedown', mouseDownHandler)
           document.addEventListener('mouseup', mouseUpHandler)
+          removeFun = () => {
+            document.removeEventListener('mousedown', mouseDownHandler)
+            document.removeEventListener('mouseup', mouseUpHandler)
+            document.removeEventListener('mousemove', mouseMoveHandler)
+          }
         }
         const go = () => {
           space.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
           timer = requestAnimationFrame(go)
         }
         bindMouseFn()
+      })
+
+      onUnmounted(() => {
+        if (removeFun) {
+          removeFun()
+        }
       })
     }
   })
