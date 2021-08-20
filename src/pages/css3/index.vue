@@ -1,6 +1,6 @@
 <template>
   <div class="box-padding">
-    <n-button-group>
+    <n-button-group vertical>
       <n-button v-for="tab in tabs" :key="tab.name" @click="changeTab(tab)">
         {{ tab.label }}
       </n-button>
@@ -12,7 +12,6 @@
 <script lang="ts">
   import {
     defineComponent,
-    reactive,
     Component,
     defineAsyncComponent
   } from 'vue'
