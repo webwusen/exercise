@@ -35,7 +35,7 @@
         private composer: EffectComposer | null = null
         // 选中部件
         private outlinePass: OutlinePass | null = null
-
+        private clearEvents: Function | null = null
         constructor(container: HTMLDivElement) {
           this.container = container
           this.width = container.clientWidth
@@ -125,9 +125,11 @@
               }
 
               document.body.addEventListener('click', selectHandler, false)
-              onUnmounted(() => {
-                document.body.removeEventListener('click', selectHandler)
-              })
+              if (!this.clearEvents) {
+                this.clearEvents = () => {
+                  document.body.removeEventListener('click', selectHandler)
+                }
+              }
             },
             (xhr) => {
               //侦听模型加载进度
@@ -146,6 +148,7 @@
           this.renderer = null
           this.controls = null
           this.composer = null
+          this.clearEvents && this.clearEvents()
         }
 
         render = () => {

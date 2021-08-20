@@ -10,11 +10,7 @@
 </template>
 
 <script lang="ts">
-  import {
-    defineComponent,
-    Component,
-    defineAsyncComponent
-  } from 'vue'
+  import { defineComponent, Component, defineAsyncComponent } from 'vue'
   import { NButtonGroup, NButton } from 'naive-ui'
 
   export default defineComponent({

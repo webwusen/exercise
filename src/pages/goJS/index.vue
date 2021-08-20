@@ -3,11 +3,11 @@
 </template>
 
 <script>
-  import { defineComponent, onMounted, nextTick, reactive } from 'vue'
+  import { defineComponent, onMounted, nextTick, ref } from 'vue'
   import go from 'gojs'
   export default defineComponent({
     setup() {
-      const data = reactive({
+      const data = ref({
         myDiagram: ''
       })
       onMounted(() => {
@@ -786,7 +786,7 @@
           //   }
         ]
         model.nodeDataArray = nodeDataArray
-        // data.myDiagram.model = model
+        data.myDiagram.model = model
       }
     }
   })
