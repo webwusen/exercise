@@ -30,7 +30,7 @@
         const space = document.getElementById('space') as HTMLDivElement
         const bindMouseFn = () => {
           /**
-           * 鼠标按下时记录当前点Wie初始点
+           * 鼠标按下时记录当前点为初始点
            * 绑定鼠标移动事件开始执行动画函数go
            */
           function mouseDownHandler(event: MouseEvent) {
