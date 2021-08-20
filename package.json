@@ -9,6 +9,7 @@
   "dependencies": {
     "@types/node": "^16.3.1",
     "@types/three": "^0.130.0",
+    "gojs": "^2.1.48",
     "naive-ui": "^2.15.4",
     "three": "^0.130.1",
     "vue": "^3.0.5",

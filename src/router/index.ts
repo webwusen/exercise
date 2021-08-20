@@ -48,6 +48,14 @@ export const routes: Array<RouteRecordRaw> = [
         meta: {
           key: '/css3'
         }
+      },
+      {
+        path: '/goJS',
+        name: 'Gojs',
+        component: () => import('@/pages/goJS/index.vue'),
+        meta: {
+          key: '/goJS'
+        }
       }
     ]
   }

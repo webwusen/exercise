@@ -814,6 +814,11 @@ globals@^13.6.0, globals@^13.9.0:
   dependencies:
     type-fest "^0.20.2"
 
+gojs@^2.1.48:
+  version "2.1.48"
+  resolved "https://registry.nlark.com/gojs/download/gojs-2.1.48.tgz#1ffde6e2234678868cd44d2dc06cf66a78ad2e7e"
+  integrity sha1-H/3m4iNGeIaM1E0twGz2anitLn4=
+
 graceful-fs@^4.1.2, graceful-fs@^4.2.2:
   version "4.2.6"
   resolved "https://registry.nlark.com/graceful-fs/download/graceful-fs-4.2.6.tgz?cache=0&sync_timestamp=1618846820463&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fgraceful-fs%2Fdownload%2Fgraceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
