@@ -7,9 +7,7 @@
   import go from 'gojs'
   export default defineComponent({
     setup() {
-      const data = ref({
-        myDiagram: ''
-      })
+      let myDiagram = null
       onMounted(() => {
         nextTick(() => {
           init()
@@ -22,11 +20,10 @@
         //隐藏展开操作
         //   console.log(e, data);
         let definceKey = data.definceKey
-        let node = this.myDiagram.model.findNodeDataForKey(definceKey)
+        let node = myDiagram.model.findNodeDataForKey(definceKey)
         let status = node.onShowFlag
         //   console.log(node);
-        //   let status=this.
-        this.myDiagram.model.setDataProperty(node, 'onShowFlag', !status)
+        myDiagram.model.setDataProperty(node, 'onShowFlag', !status)
       }
       const init = () => {
         document.addEventListener('contextmenu', function () {
@@ -34,7 +31,7 @@
         })
         if (window.goSamples) goSamples() // init for these samples -- you don't need to call this
         var $ = go.GraphObject.make // for conciseness in defining templates
-        data.myDiagram = $(
+        myDiagram = $(
           go.Diagram,
           'myDiagramDiv', // must name or refer to the DIV HTML element
           {
@@ -107,7 +104,7 @@
           geo.spot2 = new go.Spot(1, 1, -0.3 * p1, -0.3 * p1)
           return geo
         })
-        data.myDiagram.linkTemplate = $(
+        myDiagram.linkTemplate = $(
           go.Link, // the whole link panel
           {
             routing: go.Link.Orthogonal,
@@ -189,7 +186,7 @@
           )
         )
 
-        data.myDiagram.nodeTemplateMap.add(
+        myDiagram.nodeTemplateMap.add(
           'start',
           $(
             go.Node,
@@ -259,7 +256,6 @@
                       padding: 10,
                       width: 210,
                       height: 80
-                      //   click: this.open_nodewin,
                     },
                     [
                       $(
@@ -272,7 +268,6 @@
                           $(go.Picture, {
                             source: '/icon1.jpg',
                             margin: new go.Margin(0, 0, 3, 0),
-                            // click: this.open_nodewin,
                             desiredSize: new go.Size(11, 12)
                           }),
                           $(go.TextBlock, new go.Binding('text', 'title'), {
@@ -302,7 +297,6 @@
               {
                 source: '/add.jpg',
                 margin: new go.Margin(-12, 0, 0, 0)
-                // click: this.open_nodewin,
                 // desiredSize: new go.Size(25, 25)
               },
               [
@@ -315,7 +309,7 @@
           )
         )
         // 多策略画布图
-        data.myDiagram.nodeTemplateMap.add(
+        myDiagram.nodeTemplateMap.add(
           'end1',
           $(
             go.Node,
@@ -350,7 +344,6 @@
                   {
                     source: '/toggle.jpg',
                     //   margin: new go.Margin(0, 0, 3, 0),
-                    // click: this.open_nodewin,
                     margin: new go.Margin(15, 10, 0, 0),
                     desiredSize: new go.Size(25, 25),
                     alignment: go.Spot.TopRight,
@@ -425,7 +418,6 @@
                           $(go.Picture, {
                             source: '/icon1.jpg',
                             margin: new go.Margin(0, 0, 3, 0),
-                            // click: this.open_nodewin,
                             desiredSize: new go.Size(11, 12)
                           }),
                           $(go.TextBlock, '产品配置', {
@@ -449,7 +441,6 @@
                 source: '/add.jpg',
                 alignment: go.Spot.Bottom,
                 margin: new go.Margin(-10, 0, 0, 0)
-                // click: this.open_nodewin,
                 // desiredSize: new go.Size(25, 25)
               },
               [
@@ -462,7 +453,7 @@
           )
         )
         //   名单配置
-        data.myDiagram.nodeTemplateMap.add(
+        myDiagram.nodeTemplateMap.add(
           'list',
           $(
             go.Node,
@@ -496,7 +487,6 @@
                     $(go.Picture, {
                       source: '/list.jpg',
                       margin: new go.Margin(0, 0, 2, 0),
-                      // click: this.open_nodewin,
                       desiredSize: new go.Size(18, 18)
                     }),
                     $(go.TextBlock, '达标名单', {
@@ -516,7 +506,7 @@
             )
           )
         )
-        data.myDiagram.nodeTemplateMap.add(
+        myDiagram.nodeTemplateMap.add(
           'collection',
           $(
             go.Node,
@@ -567,7 +557,6 @@
                       {
                         source: '/toggle.jpg',
                         //   margin: new go.Margin(0, 0, 3, 0),
-                        // click: this.open_nodewin,
                         margin: new go.Margin(15, 10, 0, 0),
                         desiredSize: new go.Size(25, 25),
                         alignment: go.Spot.TopRight,
@@ -641,7 +630,6 @@
                               $(go.Picture, {
                                 source: '/icon1.jpg',
                                 margin: new go.Margin(0, 0, 3, 0),
-                                // click: this.open_nodewin,
                                 desiredSize: new go.Size(11, 12)
                               }),
                               $(go.TextBlock, '产品配置', {
@@ -664,7 +652,7 @@
           )
         )
         //单策略画布图
-        data.myDiagram.nodeTemplateMap.add(
+        myDiagram.nodeTemplateMap.add(
           'end2',
           $(
             go.Node,
@@ -735,7 +723,6 @@
                         $(go.Picture, {
                           source: '/icon1.jpg',
                           margin: new go.Margin(0, 0, 3, 0),
-                          // click: this.open_nodewin,
                           desiredSize: new go.Size(11, 12)
                         }),
                         $(go.TextBlock, '产品配置', {
@@ -762,19 +749,19 @@
             addSatus: true, //添加按钮显示状态
             onShowFlag: true, //展开状态
             items: [{ title: '进入条件' }, { title: '初始名单' }]
-          }
+          },
           // {
           //   category: "collection",
           //   items: [{ itemList: [1, 2, 3] }, { itemList: [1] }],
           // },
-          //   {
-          //     key: 2,
-          //     parent: 1,
-          //     category: 'end1',
-          //     onShowFlag: true,
-          //     addSatus: true,
-          //     itemList: [1, 2, 3, 4, 5]
-          //   },
+          {
+            key: 2,
+            parent: 1,
+            category: 'end1',
+            onShowFlag: true,
+            addSatus: true,
+            itemList: [1, 2, 3, 4, 5]
+          }
           //   {
           //     category: 'list',
           //     parent: 2
@@ -786,7 +773,7 @@
           //   }
         ]
         model.nodeDataArray = nodeDataArray
-        data.myDiagram.model = model
+        myDiagram.model = model
       }
     }
   })
