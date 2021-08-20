@@ -15,6 +15,19 @@
           init()
         })
       })
+      const open_nodewin = (e, node) => {
+        console.log(node)
+      }
+      const openToggle = (e, data) => {
+        //隐藏展开操作
+        //   console.log(e, data);
+        let definceKey = data.definceKey
+        let node = this.myDiagram.model.findNodeDataForKey(definceKey)
+        let status = node.onShowFlag
+        //   console.log(node);
+        //   let status=this.
+        this.myDiagram.model.setDataProperty(node, 'onShowFlag', !status)
+      }
       const init = () => {
         document.addEventListener('contextmenu', function () {
           return false
@@ -774,19 +787,6 @@
         ]
         model.nodeDataArray = nodeDataArray
         // data.myDiagram.model = model
-      }
-      const open_nodewin = (e, node) => {
-        console.log(node)
-      }
-      const openToggle = (e, data) => {
-        //隐藏展开操作
-        //   console.log(e, data);
-        let definceKey = data.definceKey
-        let node = this.myDiagram.model.findNodeDataForKey(definceKey)
-        let status = node.onShowFlag
-        //   console.log(node);
-        //   let status=this.
-        this.myDiagram.model.setDataProperty(node, 'onShowFlag', !status)
       }
     }
   })
