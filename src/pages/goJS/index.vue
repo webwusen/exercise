@@ -13,9 +13,9 @@
           init()
         })
       })
-      const open_nodewin = (e, node) => {
+      /* const open_nodewin = (e, node) => {
         console.log(node)
-      }
+      } */
       const openToggle = (e, data) => {
         //隐藏展开操作
         //   console.log(e, data);
@@ -29,7 +29,7 @@
         document.addEventListener('contextmenu', function () {
           return false
         })
-        if (window.goSamples) goSamples() // init for these samples -- you don't need to call this
+        if (window.goSamples) window.goSamples() // init for these samples -- you don't need to call this
         var $ = go.GraphObject.make // for conciseness in defining templates
         myDiagram = $(
           go.Diagram,

@@ -1,12 +1,12 @@
 <template>
   <div class="box">
     <img id="brush" src="@/assets/images/brush.png" />
-    <canvas class="canvas" id="dragon"></canvas>
+    <canvas id="dragon" class="canvas"></canvas>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue'
+  import { defineComponent, onMounted } from 'vue'
   import dragonSrc from '@/assets/images/dragon.jpeg'
 
   export default defineComponent({

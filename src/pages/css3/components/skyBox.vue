@@ -1,6 +1,6 @@
 <template>
   <div class="camera box-padding">
-    <div class="space" id="space">
+    <div id="space" class="space">
       <div class="front">3</div>
       <div class="back">4</div>
       <div class="left">6</div>

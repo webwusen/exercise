@@ -19,7 +19,7 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-recommended',
     'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
+    'prettier',
     'plugin:prettier/recommended',
     'eslint:recommended'
   ],
@@ -49,7 +49,7 @@ module.exports = {
       }
     ],
     'space-before-function-paren': 'off',
-    'quotes': ['error', 'single'],
+    quotes: ['error', 'single'],
     'comma-dangle': ['error', 'never'],
     'vue/require-default-prop': 'off',
     'vue/custom-event-name-casing': 'off',

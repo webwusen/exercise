@@ -1,9 +1,9 @@
 <template>
   <n-menu
     class="menu"
-    @update:value="handleUpdateValue"
     :value="currentMenut"
     :options="routesList"
+    @update:value="handleUpdateValue"
   ></n-menu>
   <div class="page">
     <router-view></router-view>
