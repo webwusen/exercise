@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
-    "lint": "eslint --ext .vue src"
+    "lint": "eslint src"
   },
   "dependencies": {
     "@types/node": "^16.3.1",

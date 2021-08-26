@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import { defineComponent, onMounted, nextTick, ref } from 'vue'
+  import { defineComponent, onMounted, nextTick } from 'vue'
   import go from 'gojs'
   export default defineComponent({
     setup() {
