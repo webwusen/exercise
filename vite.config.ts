@@ -10,7 +10,7 @@ export default defineConfig({
       '@': resolve(__dirname, 'src')
     }
   },
-  server:{
-    open:true
+  server: {
+    open: true
   }
 })

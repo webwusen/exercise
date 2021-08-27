@@ -7,3 +7,4 @@ dist-ssr
 *.rar
 *.lock
 package-locj.json
+yarn.lock
