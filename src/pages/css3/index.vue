@@ -1,11 +1,11 @@
 <template>
-  <div class="box-padding">
+  <div class="box-padding container">
     <n-button-group vertical>
       <n-button v-for="tab in tabs" :key="tab.name" @click="changeTab(tab)">
         {{ tab.label }}
       </n-button>
     </n-button-group>
-    <component :is="active.component"></component>
+    <keep-alive><component :is="active.component"></component></keep-alive>
   </div>
 </template>
 
