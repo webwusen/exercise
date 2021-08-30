@@ -60,8 +60,17 @@
 
         // 初始化绑定
         init = () => {
-          this.camera.addEventListener('mousedown', this.mouseDownHandler)
-          this.camera.addEventListener('mouseup', this.mouseUpHandler)
+          const tran = this.space.style.transform
+          // 如果盒子有transform，还原上次结束时的旋转数据
+          if (tran) {
+            // 获取字符串里小括号的内容: 'rotateX(10deg) rotateY(10deg)' => ['(10deg)', '(10deg)']
+            const re = /\([^)]+\)/g
+            const rotate = tran.match(re) as RegExpMatchArray
+            this.rotateX = +rotate[0].substring(1, rotate[0].length - 4)
+            this.rotateY = +rotate[1].substring(1, rotate[1].length - 4)
+          }
+
+          this.eventListenerHandlder('addEventListener')
         }
 
         // 移除
@@ -69,9 +78,6 @@
           if (this.timer > -1) {
             cancelAnimationFrame(this.timer)
           }
-          this.rotateX = 0
-          this.rotateY = 0
-          this.space.style.transform = `rotateX(${this.rotateX}deg) rotateY(${this.rotateY}deg)`
           this.eventListenerHandlder('removeEventListener')
         }
 
@@ -96,8 +102,6 @@
           this.allowMove = true
           this.startX = event.pageX
           this.startY = event.pageY
-          this.camera.addEventListener('mousemove', this.mouseMoveHandler)
-          document.addEventListener('mousemove', this.documentMouseMoveHandler)
           this.animate()
         }
         // 鼠标按键松开时，解绑鼠标移动事件，清除动画函数
