@@ -43,11 +43,30 @@ export const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/css3',
+        redirect: '/css3/skybox',
         name: 'Css3',
         component: () => import('@/pages/css3/index.vue'),
         meta: {
           key: '/css3'
-        }
+        },
+        children: [
+          {
+            path: '/css3/skybox',
+            name: 'SkyBox',
+            component: () => import('@/pages/css3/sky-box/index.vue'),
+            meta: {
+              key: '/css3/skybox'
+            }
+          },
+          {
+            path: '/css3/mazeboard',
+            name: 'MazeBoard',
+            component: () => import('@/pages/css3/maze-board/index.vue'),
+            meta: {
+              key: '/css3/mazeboard'
+            }
+          }
+        ]
       },
       {
         path: '/goJS',

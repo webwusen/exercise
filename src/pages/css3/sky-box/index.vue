@@ -1,12 +1,12 @@
 <template>
   <div id="camera" class="camera flex-cemtered box-padding">
     <div id="space" class="space">
-      <div class="front">3</div>
-      <div class="back">4</div>
-      <div class="left">6</div>
-      <div class="right">1</div>
-      <div class="bottom">2</div>
-      <div class="top">5</div>
+      <div class="front">front</div>
+      <div class="back">back</div>
+      <div class="right">right</div>
+      <div class="left">left</div>
+      <div class="bottom">bottom</div>
+      <div class="top">top</div>
     </div>
   </div>
 </template>
@@ -21,6 +21,11 @@
         pageX: number
         pageY: number
       }
+
+      interface EventListener {
+        (evt: Event): void
+      }
+
       let skybox: SkyBox | null = null
       class SkyBox {
         private rotateX = 0
@@ -32,6 +37,8 @@
         private speed = 1
         private space: HTMLDivElement
         private camera: HTMLDivElement
+        // 是否允许拖动
+        private allowMove = false
         private cameraInfo = {
           top: 0,
           bottom: 0,
@@ -64,10 +71,15 @@
           }
           this.rotateX = 0
           this.rotateY = 0
-          this.camera.removeEventListener('mousedown', this.mouseDownHandler)
-          this.camera.removeEventListener('mouseup', this.mouseUpHandler)
-          this.camera.removeEventListener('mousemove', this.mouseMoveHandler)
-          document.removeEventListener('mousemove', this.documentMouseMoveHandler)
+          this.space.style.transform = `rotateX(${this.rotateX}deg) rotateY(${this.rotateY}deg)`
+          this.eventListenerHandlder('removeEventListener')
+        }
+
+        eventListenerHandlder = (type: 'addEventListener' | 'removeEventListener') => {
+          this.camera[type]('mousedown', this.mouseDownHandler as EventListener)
+          this.camera[type]('mouseup', this.mouseUpHandler as EventListener)
+          this.camera[type]('mousemove', this.mouseMoveHandler as EventListener)
+          document[type]('mousemove', this.documentMouseMoveHandler as EventListener)
         }
 
         // 开始动画
@@ -81,6 +93,7 @@
          * 绑定鼠标移动事件开始执行动画函数animate
          */
         mouseDownHandler = (event: MouseEvent) => {
+          this.allowMove = true
           this.startX = event.pageX
           this.startY = event.pageY
           this.camera.addEventListener('mousemove', this.mouseMoveHandler)
@@ -89,8 +102,7 @@
         }
         // 鼠标按键松开时，解绑鼠标移动事件，清除动画函数
         mouseUpHandler = () => {
-          this.camera.removeEventListener('mousemove', this.mouseMoveHandler)
-          document.removeEventListener('mousemove', this.documentMouseMoveHandler)
+          this.allowMove = false
           if (this.timer > -1) {
             cancelAnimationFrame(this.timer)
           }
@@ -101,6 +113,7 @@
          * 改变度数后，更新停留点start的数据
          */
         mouseMoveHandler = (event: MouseEvent) => {
+          if (!this.allowMove) return
           this.rotateX = this.rotateX + -(event.pageY - this.startY / this.speed)
           this.rotateY = this.rotateY + (event.pageX - this.startX / this.speed)
           this.startY = event.pageY
@@ -108,8 +121,7 @@
         }
         documentMouseMoveHandler = (event: MouseEvent) => {
           if (this.calcBoundary(event)) {
-            this.camera.removeEventListener('mousemove', this.mouseMoveHandler)
-            document.removeEventListener('mousemove', this.documentMouseMoveHandler)
+            this.allowMove = false
           }
         }
         // 判断鼠标是否移除camera范围
@@ -120,6 +132,7 @@
       }
 
       onMounted(() => {
+        console.log('mounted')
         skybox = new SkyBox(
           document.getElementById('space') as HTMLDivElement,
           document.getElementById('camera') as HTMLDivElement
@@ -138,22 +151,21 @@
 <style scoped>
   .camera {
     height: calc(100% - 34px);
-    perspective: 200px;
-    perspective-origin: 50% 50%;
+    perspective: 500px;
   }
   .space {
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     margin: 0 auto;
     transform-style: preserve-3d;
   }
 
   .space div {
     position: absolute;
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
+    width: 200px;
+    height: 200px;
+    line-height: 200px;
     text-align: center;
     font-size: 24px;
     font-weight: bold;
@@ -162,21 +174,27 @@
   }
 
   .space .front {
-    transform: rotateZ(0) rotateY(0) rotateZ(0) translateZ(-50px);
+    background: hsla(0, 100%, 50%, 0.7);
+    transform: rotateY(0) translateZ(100px);
   }
   .space .back {
-    transform: rotateY(180deg) translateZ(-50px);
+    background: hsla(120, 100%, 50%, 0.7);
+    transform: rotateY(180deg) translateZ(100px);
   }
   .space .left {
-    transform: rotateY(90deg) translateZ(-50px);
+    background: hsla(180, 100%, 50%, 0.7);
+    transform: rotateY(-90deg) translateZ(100px);
   }
   .space .right {
-    transform: rotateY(-90deg) translateZ(-50px);
+    background: hsla(60, 100%, 50%, 0.7);
+    transform: rotateY(90deg) translateZ(100px);
   }
   .space .bottom {
-    transform: rotateX(90deg) translateZ(-50px);
+    background: hsla(300, 100%, 50%, 0.7);
+    transform: rotateX(-90deg) translateZ(100px);
   }
   .space .top {
-    transform: rotateX(-90deg) translateZ(-50px);
+    background: hsla(240, 100%, 50%, 0.7);
+    transform: rotateX(90deg) translateZ(100px);
   }
 </style>
