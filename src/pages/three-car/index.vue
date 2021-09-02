@@ -93,12 +93,12 @@
           const loader = new GLTFLoader()
 
           const darcoloader = new DRACOLoader()
-          darcoloader.setDecoderPath('/node_modules/three/examples/js/libs/draco/')
+          darcoloader.setDecoderPath('/three/draco/')
           loader.setDRACOLoader(darcoloader)
 
           // 加载车的模型
           loader.load(
-            '/public/models/ferrari.glb',
+            '/three/models/ferrari.glb',
             (gltf) => {
               const carModel = gltf.scene
               carModel.rotation.y = -1.5

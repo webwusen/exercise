@@ -25,9 +25,10 @@
       NMenu
     },
     setup() {
-      const localPathList = location.pathname.split('/')
+      const hashPath = location.hash.slice(1)
+      const currentMenut = ref(hashPath)
+      const localPathList = hashPath.split('/')
       const localPath = '/' + localPathList[1]
-      const currentMenut = ref(location.pathname)
       const defaultExpandedKeys = reactive([localPath])
 
       const routesList = formatMenuData(baseRoutes || [])

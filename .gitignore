@@ -6,5 +6,5 @@ dist-ssr
 *.zip
 *.rar
 *.lock
-package-locj.json
+package-lock.json
 yarn.lock
