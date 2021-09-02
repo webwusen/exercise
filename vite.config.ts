@@ -12,5 +12,18 @@ export default defineConfig({
   },
   server: {
     open: true
+  },
+  build: {
+    brotliSize: false,
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'naive-ui': ['naive-ui'],
+          three: ['three'],
+          gojs: ['gojs']
+        }
+      }
+    }
   }
 })

@@ -3,6 +3,7 @@
     class="menu"
     :value="currentMenut"
     :options="routesList"
+    :default-expanded-keys="defaultExpandedKeys"
     @update:value="handleUpdateValue"
   ></n-menu>
   <div class="page">
@@ -14,8 +15,9 @@
   import { defineComponent, ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import { NMenu } from 'naive-ui'
-  import { routes } from '@/router'
-  import { formatMenuData, menuItem } from '@/utils'
+  import { baseRoutes } from '@/router'
+  import { formatMenuData } from '@/utils'
+  import type { menuItem } from '@/utils'
 
   export default defineComponent({
     name: 'Home',
@@ -23,17 +25,22 @@
       NMenu
     },
     setup() {
+      const localPathList = location.pathname.split('/')
+      const localPath = '/' + localPathList[1]
       const currentMenut = ref(location.pathname)
+      const defaultExpandedKeys = reactive([localPath])
 
-      const routesList: menuItem[] = reactive(formatMenuData(routes[0].children || []))
+      const routesList = formatMenuData(baseRoutes || [])
+
       const router = useRouter()
-      const handleUpdateValue = (key: string, item: menuItem): void => {
+      const handleUpdateValue: any = (key: string, item: menuItem) => {
         currentMenut.value = key
         router.push(item.path)
       }
 
       return {
         currentMenut,
+        defaultExpandedKeys,
         routesList,
         handleUpdateValue
       }
