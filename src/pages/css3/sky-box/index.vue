@@ -13,17 +13,14 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, onUnmounted } from 'vue'
+  import type { EventListener } from '@/type/index'
 
   export default defineComponent({
     name: 'SkyBox',
     setup() {
       interface point {
-        pageX: number
-        pageY: number
-      }
-
-      interface EventListener {
-        (evt: Event): void
+        clientX: number
+        clientY: number
       }
 
       let skybox: SkyBox | null = null
@@ -100,8 +97,8 @@
          */
         mouseDownHandler = (event: MouseEvent) => {
           this.allowMove = true
-          this.startX = event.pageX
-          this.startY = event.pageY
+          this.startX = event.clientX
+          this.startY = event.clientY
           this.animate()
         }
         // 鼠标按键松开时，解绑鼠标移动事件，清除动画函数
@@ -118,10 +115,10 @@
          */
         mouseMoveHandler = (event: MouseEvent) => {
           if (!this.allowMove) return
-          this.rotateX = this.rotateX + -(event.pageY - this.startY / this.speed)
-          this.rotateY = this.rotateY + (event.pageX - this.startX / this.speed)
-          this.startY = event.pageY
-          this.startX = event.pageX
+          this.rotateX = this.rotateX + -(event.clientY - this.startY / this.speed)
+          this.rotateY = this.rotateY + (event.clientX - this.startX / this.speed)
+          this.startY = event.clientY
+          this.startX = event.clientX
         }
         documentMouseMoveHandler = (event: MouseEvent) => {
           if (this.calcBoundary(event)) {
@@ -129,7 +126,7 @@
           }
         }
         // 判断鼠标是否移除camera范围
-        calcBoundary = ({ pageX: x, pageY: y }: point) => {
+        calcBoundary = ({ clientX: x, clientY: y }: point) => {
           const { top, bottom, left, right } = this.cameraInfo
           return x <= left || x >= right || y <= top || y >= bottom
         }
