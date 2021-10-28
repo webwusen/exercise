@@ -1,7 +1,11 @@
 <template>
   <div id="mazeBoard" class="maze-board">
     <div id="mazeWall" class="maze-board-wall">
-      <div class="maze-piece-box">
+      <div
+        id="move"
+        class="maze-piece-box"
+        style="transform: translateZ(25px) rotateX(0deg) rotateY(0deg)"
+      >
         <div class="maze-piece front">z</div>
         <div class="maze-piece back">z</div>
         <div class="maze-piece left">x</div>
@@ -23,14 +27,14 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, Ref, onMounted, onUnmounted } from 'vue'
+  import { defineComponent, onMounted, onUnmounted } from 'vue'
   import type { EventListener } from '@/type/index'
 
   export default defineComponent({
     name: 'MazeBoard',
     setup() {
-      /* 
-      格子数据，0不能通过，1可以通过
+      /*
+      格子数据，0能通过，1不能通过
         0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0,
         0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0,
         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -45,9 +49,9 @@
         0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
         1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0,
         1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-        0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0 
+        0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0
       */
-      const grid: Ref<number[]> = ref([
+      const grid: number[] = [
         0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1,
         0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0,
         1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
@@ -56,12 +60,15 @@
         1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0,
         0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1,
         0, 0, 1, 1, 0, 0, 0, 0
-      ])
+      ]
       interface InitClass {
         remove: Function
       }
+
       let initClass: null | InitClass = null
       const init = () => {
+        let point: number[] = [15, 15]
+        const move = document.getElementById('move') as HTMLDivElement
         const pan = document.getElementById('mazeWall') as HTMLDivElement
         const board = document.getElementById('mazeBoard') as HTMLDivElement
         let startX = 0
@@ -89,10 +96,70 @@
           startX = event.clientX
           startY = event.clientY
         }
+
+        const calcPoint = ([x, y]: number[]): number => {
+          const index: number = (y - 1) * 15 + x - 1
+          const item = grid[index]
+          return item
+        }
+
+        const onKeyDownHandler = (event: KeyboardEvent) => {
+          const p = [...point]
+          let x = 0
+          let y = 0
+          switch (event.key) {
+            case 'ArrowUp': {
+              if (p[1] !== 1) {
+                p[1] = p[1] - 1
+                x += 360
+              }
+              break
+            }
+            case 'ArrowDown': {
+              if (p[1] !== 15) {
+                p[1] = p[1] + 1
+                x -= 360
+              }
+              break
+            }
+            case 'ArrowLeft': {
+              if (p[0] !== 1) {
+                p[0] = p[0] - 1
+                y -= 360
+              }
+              break
+            }
+            case 'ArrowRight': {
+              if (p[0] !== 15) {
+                p[0] = p[0] + 1
+                y += 360
+              }
+              break
+            }
+          }
+
+          if (!(p[0] === point[0] && p[1] === point[1]) && calcPoint(p) === 0) {
+            point = [...p]
+            move.style.right = (15 - point[0]) * 50 + 'px'
+            move.style.bottom = (15 - point[1]) * 50 + 'px'
+            const tran = move.style.transform
+            if (tran) {
+              console.log(tran)
+              const re = /\([^)]+\)/g
+              const tranList = tran.match(re) as RegExpMatchArray
+              x = +tranList[1].substring(1, tranList[1].length - 4) + x
+              y = +tranList[2].substring(1, tranList[2].length - 4) + y
+              console.log(x, y)
+              move.style.transform = `translateZ(25px) rotateX(${x}deg) rotateY(${y}deg)`
+            }
+          }
+        }
+
         const eventHandler = (eventName: 'addEventListener' | 'removeEventListener') => {
           board[eventName]('mousedown', mouseDownHandler as EventListener)
           board[eventName]('mouseup', mouseUpHandler as EventListener)
           board[eventName]('mousemove', mouseMoveHandler as EventListener)
+          document[eventName]('keydown', onKeyDownHandler as EventListener)
         }
         eventHandler('addEventListener')
 
@@ -102,6 +169,7 @@
           time = requestAnimationFrame(animate)
         }
 
+        document.addEventListener
         const remove = () => {
           if (time) {
             cancelAnimationFrame(time)
@@ -158,7 +226,7 @@
     float: left;
     border: 1px solid;
   }
-  .maze-board-grid:first-child {
+  .maze-piece-box + .maze-board-grid {
     background-color: orange;
   }
   .maze-board-grid:last-child {
@@ -170,7 +238,13 @@
     transform: translateZ(25px);
     transform-style: preserve-3d;
     transform-origin: 50% 50%;
-    transition: all 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: all 2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+  .maze-board-grid {
+    position: relative;
+    transform-style: preserve-3d;
+    transform-origin: 50% 50%;
+    transition: all 2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   }
   .maze-board-roadblock,
   .maze-piece-box,
@@ -191,6 +265,7 @@
   .maze-piece-box {
     right: 0;
     bottom: 0;
+    z-index: 999;
   }
   .maze-piece {
     background-color: orange;
