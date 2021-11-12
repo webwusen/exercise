@@ -13,6 +13,11 @@ export default defineConfig({
   server: {
     open: true
   },
+  esbuild: {
+    jsxFactory: 'h',
+    jsxFragment: 'Fragment',
+    jsxInject: 'import { h } from "vue";'
+  },
   build: {
     brotliSize: false,
     chunkSizeWarningLimit: 1500,

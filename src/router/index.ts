@@ -43,19 +43,27 @@ export const baseRoutes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: '/css3/skybox',
+        path: '/css3/skyBox',
         name: 'SkyBox',
         component: () => import('@/pages/css3/sky-box/index.vue'),
         meta: {
-          key: '/css3/skybox'
+          key: '/css3/skyBox'
         }
       },
       {
-        path: '/css3/mazeboard',
+        path: '/css3/mazeBoard',
         name: 'MazeBoard',
         component: () => import('@/pages/css3/maze-board/index.vue'),
         meta: {
-          key: '/css3/mazeboard'
+          key: '/css3/mazeBoard'
+        }
+      },
+      {
+        path: '/css3/starrySky',
+        name: 'StarrySky',
+        component: () => import('@/pages/css3/starry-sky/index.vue'),
+        meta: {
+          key: '/css3/starrySky'
         }
       }
     ]
@@ -66,6 +74,14 @@ export const baseRoutes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/goJS/index.vue'),
     meta: {
       key: '/goJS'
+    }
+  },
+  {
+    path: '/other',
+    name: 'other',
+    component: () => import('@/pages/other/index'),
+    meta: {
+      key: '/other'
     }
   }
 ]

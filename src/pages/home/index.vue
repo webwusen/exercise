@@ -30,7 +30,6 @@
       const localPathList = hashPath.split('/')
       const localPath = '/' + localPathList[1]
       const defaultExpandedKeys = reactive([localPath])
-
       const routesList = formatMenuData(baseRoutes || [])
 
       const router = useRouter()
