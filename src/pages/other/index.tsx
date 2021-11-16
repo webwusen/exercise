@@ -1,5 +1,6 @@
 import { defineComponent, ref, watch, reactive } from 'vue'
 import Child from './child.vue'
+import BigNumber from 'bignumber.js'
 
 const Index = defineComponent({
   setup() {
