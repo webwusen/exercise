@@ -4,85 +4,80 @@ export const baseRoutes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () => import('@/pages/dashboard/index.vue'),
-    meta: {
-      key: '/dashboard'
-    }
+    component: () => import('@/pages/dashboard/index.vue')
   },
   {
-    path: '/car',
-    name: 'Car',
-    component: () => import('@/pages/three-car/index.vue'),
-    meta: {
-      key: '/car'
-    }
-  },
-  {
-    path: '/dragon',
-    name: 'Dragon',
-    component: () => import('@/pages/dragon/index.vue'),
-    meta: {
-      key: '/dragon'
-    }
-  },
-  {
-    path: '/snake',
-    name: 'Snake',
-    component: () => import('@/pages/gluttonous-snake/index.vue'),
-    meta: {
-      key: '/snake'
-    }
+    path: '/canvas',
+    redirect: '/canvas/particle',
+    name: 'Canvas',
+    component: () => import('@/pages/canvas/index.vue'),
+    children: [
+      {
+        path: '/canvas/particle',
+        name: 'Particle',
+        component: () => import('@/pages/canvas/particle/index.vue')
+      },
+      {
+        path: '/canvas/dragon',
+        name: 'Dragon',
+        component: () => import('@/pages/canvas/dragon/index.vue')
+      },
+      {
+        path: '/canvas/snake',
+        name: 'Snake',
+        component: () => import('@/pages/canvas/gluttonous-snake/index.vue')
+      }
+    ]
   },
   {
     path: '/css3',
     redirect: '/css3/skybox',
     name: 'Css3',
     component: () => import('@/pages/css3/index.vue'),
-    meta: {
-      key: '/css3'
-    },
     children: [
       {
         path: '/css3/skyBox',
         name: 'SkyBox',
-        component: () => import('@/pages/css3/sky-box/index.vue'),
-        meta: {
-          key: '/css3/skyBox'
-        }
+        component: () => import('@/pages/css3/sky-box/index.vue')
       },
       {
         path: '/css3/mazeBoard',
         name: 'MazeBoard',
-        component: () => import('@/pages/css3/maze-board/index.vue'),
-        meta: {
-          key: '/css3/mazeBoard'
-        }
+        component: () => import('@/pages/css3/maze-board/index.vue')
       },
       {
         path: '/css3/starrySky',
         name: 'StarrySky',
-        component: () => import('@/pages/css3/starry-sky/index.vue'),
-        meta: {
-          key: '/css3/starrySky'
-        }
+        component: () => import('@/pages/css3/starry-sky/index.vue')
+      },
+      {
+        path: '/css3/filterContrast',
+        name: 'FilterContrast',
+        component: () => import('@/pages/css3/filter-contrast/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/threeJs',
+    name: 'ThreeJs',
+    component: () => import('@/pages/threeJs/index.vue'),
+    children: [
+      {
+        path: '/threeJs/car',
+        name: 'Car',
+        component: () => import('@/pages/threeJs/three-car/index.vue')
       }
     ]
   },
   {
     path: '/goJS',
     name: 'Gojs',
-    component: () => import('@/pages/goJS/index.vue'),
-    meta: {
-      key: '/goJS'
-    }
+    component: () => import('@/pages/goJS/index.vue')
   },
   {
     path: '/other',
     name: 'other',
-    component: () => import('@/pages/other/index'),
-    meta: {
-      key: '/other'
-    }
+    component: () => import('@/pages/other/index')
   }
 ]
 export const routes: Array<RouteRecordRaw> = [
@@ -91,9 +86,6 @@ export const routes: Array<RouteRecordRaw> = [
     name: 'Home',
     redirect: '/dashboard',
     component: () => import('@/pages/home/index.vue'),
-    meta: {
-      key: '/'
-    },
     children: baseRoutes
   }
 ]
