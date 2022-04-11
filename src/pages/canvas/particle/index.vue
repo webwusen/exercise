@@ -2,15 +2,16 @@
   <canvas id="mycanvas"></canvas>
 </template>
 
-<script>
+<script lang="ts">
   import { defineComponent, onMounted } from 'vue'
   export default defineComponent({
     name: 'Particle',
     setup() {
+      // 粒子效果
       onMounted(() => {
-        let canvas = document.getElementById('mycanvas')
+        let canvas = document.getElementById('mycanvas') as HTMLCanvasElement
         let lineDis = 8000 //连线距离
-        let ctx = canvas.getContext('2d')
+        let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
         let rangeX = window.innerWidth / 2 //设置鼠标移入连线位置
         let rangeY = window.innerHeight / 2
         function size() {
@@ -19,8 +20,16 @@
         }
         size()
         class Ball {
+          x: number
+          y: number
+          r: number
+          red: number
+          green: number
+          blue: number
+          aph: number
+          color: string
           // 构造器
-          constructor(x, y, r) {
+          constructor(x: number, y: number, r: number) {
             this.x = x
             this.y = y
             this.r = r
@@ -41,7 +50,9 @@
         }
 
         class moveBall extends Ball {
-          constructor(x, y, r) {
+          dx: number
+          dy: number
+          constructor(x: number, y: number, r: number) {
             super(x, y, r)
             this.dx = Math.random() * 2 - 1
             this.dy = Math.random() * 2 - 1
@@ -57,7 +68,7 @@
             }
           }
         }
-        let dots = [] //小球集中营
+        let dots: Array<moveBall> = [] //小球集中营
         for (let i = 0; i < 500; i++) {
           dots.push(
             new moveBall(
@@ -67,9 +78,12 @@
             )
           )
         }
-
+        interface WareaProp {
+          x: number | null
+          y: number | null
+        }
         // 鼠标活动时，获取鼠标坐标
-        var warea = { x: null, y: null }
+        var warea: WareaProp = { x: null, y: null }
         canvas.onmousemove = function (e) {
           e = e || window.event
           warea.x = e.clientX - canvas.offsetLeft
@@ -87,22 +101,19 @@
          * 逐个对比连线
          * @param ndots
          */
-        function bubDrawLine(ndots) {
+        function bubDrawLine(ndots: Array<WareaProp | moveBall>) {
           var ndot
           dots.forEach(function (dot) {
             dot.render()
             dot.upDate()
             // 循环比对粒子间的距离
             for (var i = 0; i < ndots.length; i++) {
-              ndot = ndots[i]
+              ndot = ndots[i] as moveBall
 
               if (dot === ndot || ndot.x === null || ndot.y === null) continue
 
               var xc = dot.x - ndot.x
               var yc = dot.y - ndot.y
-
-              // 如果x轴距离或y轴距离大于max,则不计算粒子距离
-              if (xc > ndot.max || yc > lineDis) continue
 
               // 两个粒子之间的距离
               var dis = xc * xc + yc * yc

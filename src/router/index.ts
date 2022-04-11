@@ -73,11 +73,6 @@ export const baseRoutes: Array<RouteRecordRaw> = [
     path: '/goJS',
     name: 'Gojs',
     component: () => import('@/pages/goJS/index.vue')
-  },
-  {
-    path: '/other',
-    name: 'other',
-    component: () => import('@/pages/other/index')
   }
 ]
 export const routes: Array<RouteRecordRaw> = [
