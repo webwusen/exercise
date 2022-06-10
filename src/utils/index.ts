@@ -8,16 +8,23 @@ export type menuItem = MenuOption & {
   children?: Array<menuItem>
 }
 
-export function formatMenuData(routes: Array<RouteRecordRaw>): Array<menuItem> {
+export function formatMenuData(
+  routes: Array<RouteRecordRaw>,
+  parent: menuItem | undefined
+): Array<menuItem> {
   const list: Array<menuItem> = []
   routes.forEach((item) => {
+    let path = item.path !== '/' ? '/' + item.path : item.path
+    if (parent) {
+      path = parent.path + path
+    }
     const menuItem: menuItem = {
-      path: item.path,
+      path: path,
       label: item.name as string,
-      key: item.path
+      key: path
     }
     if (item.children) {
-      menuItem.children = formatMenuData(item.children)
+      menuItem.children = formatMenuData(item.children, menuItem)
     }
     list.push(menuItem)
   })
