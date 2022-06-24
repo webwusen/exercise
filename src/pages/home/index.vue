@@ -16,8 +16,8 @@
   import { useRouter } from 'vue-router'
   import { NMenu } from 'naive-ui'
   import { baseRoutes } from '@/router'
-  import { formatMenuData } from '@/utils'
-  import type { menuItem } from '@/utils'
+  import { formatMenuData } from '@/utils/formatMenuData'
+  import type { menuItem } from '@/utils/formatMenuData'
 
   export default defineComponent({
     name: 'Home',

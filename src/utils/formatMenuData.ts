@@ -10,7 +10,7 @@ export type menuItem = MenuOption & {
 
 export function formatMenuData(
   routes: Array<RouteRecordRaw>,
-  parent: menuItem | undefined
+  parent?: menuItem | undefined
 ): Array<menuItem> {
   const list: Array<menuItem> = []
   routes.forEach((item) => {

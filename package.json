@@ -6,7 +6,9 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint --ext .ts,.js,.vue src",
+    "test": "jest"
   },
   "dependencies": {
     "@types/node": "^16.3.1",
