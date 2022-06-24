@@ -5,4 +5,5 @@ dist-ssr
 *.local
 *.zip
 *.rar
+package-lock.json
 yarn-error.log
