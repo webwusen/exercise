@@ -24,7 +24,8 @@ body,
 
 .page {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .box-padding {

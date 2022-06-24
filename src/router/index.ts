@@ -26,6 +26,11 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         path: 'snake',
         name: 'Snake',
         component: () => import('@/pages/canvas/gluttonous-snake/index.vue')
+      },
+      {
+        path: 'drop',
+        name: 'Drop',
+        component: () => import('@/pages/canvas/drop-demo/index.vue')
       }
     ]
   },
