@@ -57,6 +57,7 @@ module.exports = {
     'vue/comment-directive': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'vue/html-self-closing': 'off',
-    'vue/max-attributes-per-line': 'off'
+    'vue/max-attributes-per-line': 'off',
+    'no-var': 'error'
   }
 }

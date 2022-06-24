@@ -83,7 +83,7 @@
           y: number | null
         }
         // 鼠标活动时，获取鼠标坐标
-        var warea: WareaProp = { x: null, y: null }
+        let warea: WareaProp = { x: null, y: null }
         canvas.onmousemove = function (e) {
           e = e || window.event
           warea.x = e.clientX - canvas.offsetLeft
@@ -102,21 +102,21 @@
          * @param ndots
          */
         function bubDrawLine(ndots: Array<WareaProp | moveBall>) {
-          var ndot
+          let ndot
           dots.forEach(function (dot) {
             dot.render()
             dot.upDate()
             // 循环比对粒子间的距离
-            for (var i = 0; i < ndots.length; i++) {
+            for (let i = 0; i < ndots.length; i++) {
               ndot = ndots[i] as moveBall
 
               if (dot === ndot || ndot.x === null || ndot.y === null) continue
 
-              var xc = dot.x - ndot.x
-              var yc = dot.y - ndot.y
+              let xc = dot.x - ndot.x
+              let yc = dot.y - ndot.y
 
               // 两个粒子之间的距离
-              var dis = xc * xc + yc * yc
+              let dis = xc * xc + yc * yc
 
               // 如果粒子距离超过max,则不做处理
               if (dis > lineDis) continue

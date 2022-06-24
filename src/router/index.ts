@@ -78,11 +78,6 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/threeJs/three-car/index.vue')
       }
     ]
-  },
-  {
-    path: 'goJS',
-    name: 'Gojs',
-    component: () => import('@/pages/goJS/index.vue')
   }
 ]
 export const routes: Array<RouteRecordRaw> = [
