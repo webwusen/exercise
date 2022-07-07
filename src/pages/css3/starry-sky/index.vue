@@ -29,7 +29,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use "sass:math";
+  @use 'sass:math';
   @function randomColor() {
     @return rgb(random(255), random(255), random(255));
   }

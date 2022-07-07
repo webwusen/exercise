@@ -14,7 +14,7 @@ export function formatMenuData(
 ): Array<menuItem> {
   const list: Array<menuItem> = []
   routes.forEach((item) => {
-    let path = item.path !== '/' ? '/' + item.path : item.path
+    let path = '/' + item.path
     if (parent) {
       path = parent.path + path
     }

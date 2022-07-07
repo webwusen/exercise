@@ -32,7 +32,7 @@
   </div>
 </template>
 <style lang="scss">
-  @use "sass:math";
+  @use 'sass:math';
   #zongzi {
     width: 100%;
     height: 100vh;

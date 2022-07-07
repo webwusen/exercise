@@ -14,7 +14,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use "sass:math";
+  @use 'sass:math';
 
   $count: 2;
   $speed: 8s;
