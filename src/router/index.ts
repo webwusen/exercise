@@ -46,6 +46,11 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/css3/sky-box/index.vue')
       },
       {
+        path: 'rotateBox',
+        name: 'RotateBox',
+        component: () => import('@/pages/css3/rotate-box/index.vue')
+      },
+      {
         path: 'mazeBoard',
         name: 'MazeBoard',
         component: () => import('@/pages/css3/maze-board/index.vue')

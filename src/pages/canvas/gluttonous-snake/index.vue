@@ -1,5 +1,5 @@
 <template>
-  <div class="snake box-padding">
+  <div class="snake p-8">
     <n-space>
       <n-button @click="begin">begin</n-button>
       <n-button @click="control">{{ status }}</n-button>

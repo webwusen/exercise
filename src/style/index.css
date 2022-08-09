@@ -1,44 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
 }
 
-html,
-body,
-#app {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+html {
+  font-size: 10px;
 }
 
 #app {
-  display: flex;
-}
-
-.menu {
-  width: 200px;
-  height: 100%;
-  border-right: 1px solid #eee;
-  overflow: hidden;
-  overflow-y: auto;
-}
-
-.page {
-  flex: 1;
-  overflow: hidden;
-  overflow-y: auto;
-}
-
-.box-padding {
-  padding: 20px;
-}
-
-.container {
-  width: 100%;
-  height: 100%;
-}
-
-.flex-cemtered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply flex w-screen h-screen overflow-hidden;
 }

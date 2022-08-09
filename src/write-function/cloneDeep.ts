@@ -31,6 +31,7 @@ export type arrType = {
 export default function cloneDeep(value: any, map?: WeakMap<any, any>): any {
   let result: any
   if (typeof value !== 'object' || isFunc(value)) return value
+  // 使用WeakMap解决循环引用问题
   map || (map = new WeakMap())
   const stack = map.get(value)
   if (stack) {

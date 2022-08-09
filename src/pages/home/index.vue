@@ -1,16 +1,3 @@
-<template>
-  <n-menu
-    class="menu"
-    :value="currentMenut"
-    :options="routesList"
-    :default-expanded-keys="defaultExpandedKeys"
-    @update:value="handleUpdateValue"
-  ></n-menu>
-  <div class="page">
-    <router-view></router-view>
-  </div>
-</template>
-
 <script lang="ts">
   import { defineComponent, ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
@@ -47,3 +34,15 @@
     }
   })
 </script>
+<template>
+  <n-menu
+    class="w-80 h-full border-r border-gray-300"
+    :value="currentMenut"
+    :options="routesList"
+    :default-expanded-keys="defaultExpandedKeys"
+    @update:value="handleUpdateValue"
+  ></n-menu>
+  <div class="flex-1 overflow-x-hidden overflow-y-auto">
+    <router-view></router-view>
+  </div>
+</template>
